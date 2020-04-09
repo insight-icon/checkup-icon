@@ -11,6 +11,23 @@ DB_DBNAME = os.getenv('DB_DBNAME', 'postgres')
 DB_HOST = os.getenv('DB_HOST', 'localhost')
 DB_PASSWORD = os.getenv('DB_PASSWORD', 'postgres')
 
+NETWORKS_JSON = 'https://raw.githubusercontent.com/JINWOO-J/icon_network_info/master/conf/all.json'
+
+LOCAL_CONFIG = os.path.join(os.path.curdir, 'configs', 'all.json')
+
+
+def get_networks_github():
+    nets_conf = requests.get(NETWORKS_JSON).json()
+    return nets_conf
+
+
+def get_networks_json():
+
+    with open(LOCAL_CONFIG, 'r') as f:
+        nets_conf = json.load(f)
+
+    return nets_conf
+
 
 def get_url(network_name):
     if network_name not in ['mainnet', 'testnet']:
@@ -88,6 +105,10 @@ def write_checkup_conf(checkup_conf):
 
 if __name__ == "__main__":
     # network_name = sys.argv[1]
-    network_name = 'mainnet'
-    checkup_conf = get_checkup_dict(network_name)
-    pprint(checkup_conf)
+    # network_name = 'mainnet'
+    # checkup_conf = get_checkup_dict(network_name)
+    # pprint(checkup_conf)
+    a = get_networks_json()
+
+    pprint(a)
+
