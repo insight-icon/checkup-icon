@@ -1,0 +1,44 @@
+{
+  "checkers": [
+    {
+      "type": "tcp",
+      "endpoint_name": "ICON_Foundation",
+      "endpoint_url": "210.180.69.101:9000",
+      "attempts": 1
+    },
+    {
+      "type": "tcp",
+      "endpoint_name": "ICX_Station",
+      "endpoint_url": "3.14.196.215:9000",
+      "attempts": 1
+    },
+    {
+      "type": "tcp",
+      "endpoint_name": "Ubik_Capital",
+      "endpoint_url": "13.58.103.19:9000",
+      "attempts": 1
+    },
+    {
+      "type": "tcp",
+      "endpoint_name": "VELIC",
+      "endpoint_url": "3.114.212.239:9000",
+      "attempts": 1
+    },
+    {
+      "type": "tcp",
+      "endpoint_name": "Bara-Node",
+      "endpoint_url": "35.224.139.66:9000",
+      "attempts": 1
+    },
+    {
+      "type": "tcp",
+      "endpoint_name": "ICON Thailand",
+      "endpoint_url": "35.239.120.251:9000",
+      "attempts": 1
+    }
+  ],
+  "storage": {
+    "provider": "fs",
+    "dir": "/var/www/localhost/htdocs/data"
+  }
+}
