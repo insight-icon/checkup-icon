@@ -1,0 +1,6 @@
+.idea
+
+Pipfile
+Pipfile.lock
+
+.circleci/.configs

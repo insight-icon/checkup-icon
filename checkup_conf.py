@@ -2,8 +2,14 @@ import requests
 import json
 import sys
 import logging
+import os
 
 from pprint import pprint
+
+DB_USER = os.getenv('DB_USER', 'postgres')
+DB_DBNAME = os.getenv('DB_DBNAME', 'postgres')
+DB_HOST = os.getenv('DB_HOST', 'localhost')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'postgres')
 
 
 def get_url(network_name):
@@ -43,12 +49,11 @@ def get_preps(network_name):
     return response
 
 
-def get_checkers(network_name):
+def get_checkup_dict(network_name):
     response = get_preps(network_name)
     preps = response['result']['preps']
     checkers = []
     for i in range(0, len(preps)):
-
         endpoint_url = preps[i]['name']
         endpoint_name = "{}:9000".format(preps[i]['p2pEndpoint'].split(':')[0])
         checkers.append({
@@ -57,19 +62,32 @@ def get_checkers(network_name):
             "endpoint_url": endpoint_url,
             "attempts": 1
         })
-    return checkers
 
-# def main():
-#     check_if_exists(network_name, )
+    checkup_conf = {
+        'checkers': checkers,
+        'storage': {
+            "provider": "sql",
+            "postgresql": {
+                "user": DB_USER,
+                "dbname": DB_DBNAME,
+                "host": DB_HOST,
+                "port": 5432,
+                "password": DB_PASSWORD,
+                "sslmode": "disable"
+            }
+        }
+    }
+
+    return checkup_conf
+
+
+def write_checkup_conf(checkup_conf):
+    with open('checkup1.json', 'w') as f:
+        json.dump(checkup_conf, f)
 
 
 if __name__ == "__main__":
     # network_name = sys.argv[1]
     network_name = 'mainnet'
-
-    preps_dict = get_preps(network_name)['result']['preps']
-    checkers = get_checkers(network_name)
-    with open('checkup1.json', 'w') as f:
-        json.dump(checkers, f)
-    print()
-    # main()
+    checkup_conf = get_checkup_dict(network_name)
+    pprint(checkup_conf)

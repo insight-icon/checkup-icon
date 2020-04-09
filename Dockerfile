@@ -1,5 +1,5 @@
 # credit https://github.com/treemo/docker-checkup
-FROM alpine:latest
+FROM alpine:3.7.7-alpine3.11
 
 # install requirements
 RUN apk update
@@ -10,7 +10,8 @@ RUN apk add lighttpd
 
 # build app
 ENV GOPATH /go
-run apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/community go git gcc libc-dev libgcc
+
+RUN apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/community go git gcc libc-dev libgcc
 RUN /usr/bin/go get github.com/sourcegraph/checkup/cmd/checkup
 RUN cp /go/bin/checkup /usr/bin/checkup
 RUN cp -r /go/src/github.com/sourcegraph/checkup/statuspage/* /var/www/localhost/htdocs/
