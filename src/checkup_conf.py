@@ -35,8 +35,7 @@ def get_api_endpoint(network_name, pull_remote=True):
     return api_endpoint
 
 
-def get_preps(network_name):
-    api_endpoint = get_api_endpoint(network_name)
+def get_preps(api_endpoint):
     payload = {
         "jsonrpc": "2.0",
         "id": 1234,
@@ -54,7 +53,7 @@ def get_preps(network_name):
         }
     }
 
-    response = requests.post(api_endpoint, json=payload).json()
+    response = requests.post(api_endpoint + '/api/v3', json=payload).json()
     assert response["jsonrpc"]
     assert response["id"] == 1234
     return response
@@ -96,6 +95,10 @@ def write_checkup_conf(checkup_conf):
     with open('../checkup1.json', 'w') as f:
         json.dump(checkup_conf, f)
 
+
+def main():
+    api_endpoint = get_api_endpoint(network_name, pull_remote=True)
+    preps = get_preps(api_endpoint)
 
 if __name__ == "__main__":
     # network_name = sys.argv[1]
