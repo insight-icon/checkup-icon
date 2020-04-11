@@ -13,36 +13,30 @@ DB_PASSWORD = os.getenv('DB_PASSWORD', 'postgres')
 
 NETWORKS_JSON = 'https://raw.githubusercontent.com/JINWOO-J/icon_network_info/master/conf/all.json'
 
-LOCAL_CONFIG = os.path.join(os.path.curdir, 'configs', 'all.json')
+LOCAL_CONFIG = os.path.join(os.path.curdir, '..', 'configs', 'all.json')
 
 
-def get_networks_github():
-    nets_conf = requests.get(NETWORKS_JSON).json()
-    return nets_conf
-
-
-def get_networks_json():
-
-    with open(LOCAL_CONFIG, 'r') as f:
-        nets_conf = json.load(f)
-
-    return nets_conf
-
-
-def get_url(network_name):
-    if network_name not in ['mainnet', 'testnet']:
-        return ValueError('Need to specify network_name -> either mainnet or testnet')
-    if network_name == 'mainnet':
-        url = "https://ctz.solidwallet.io/api/v3"
-    elif network_name == 'testnet':
-        url = "https://zicon.net.solidwallet.io/api/v3"
+def get_api_endpoint(network_name, pull_remote=True):
+    api_endpoint = ""
+    if pull_remote:
+        nets_conf = requests.get(NETWORKS_JSON).json()
     else:
-        return ValueError('Need to specify network_name -> either mainnet or testnet')
-    return url
+        print(LOCAL_CONFIG)
+        with open(LOCAL_CONFIG, 'r') as f:
+            nets_conf = json.load(f)
+
+    for net in nets_conf:
+        if net['network_name'] == network_name or net['network_alias'] == network_name:
+            api_endpoint = net['api_endpoint']
+            # nid = net['nid']
+    if api_endpoint == "":
+        ValueError('Need to specify network_name -> either mainnet, Euljiro, Yeouido, Pagoda or their alias')
+
+    return api_endpoint
 
 
 def get_preps(network_name):
-    url = get_url(network_name)
+    api_endpoint = get_api_endpoint(network_name)
     payload = {
         "jsonrpc": "2.0",
         "id": 1234,
@@ -60,7 +54,7 @@ def get_preps(network_name):
         }
     }
 
-    response = requests.post(url, json=payload).json()
+    response = requests.post(api_endpoint, json=payload).json()
     assert response["jsonrpc"]
     assert response["id"] == 1234
     return response
@@ -99,16 +93,13 @@ def get_checkup_dict(network_name):
 
 
 def write_checkup_conf(checkup_conf):
-    with open('checkup1.json', 'w') as f:
+    with open('../checkup1.json', 'w') as f:
         json.dump(checkup_conf, f)
 
 
 if __name__ == "__main__":
     # network_name = sys.argv[1]
-    # network_name = 'mainnet'
-    # checkup_conf = get_checkup_dict(network_name)
-    # pprint(checkup_conf)
-    a = get_networks_json()
+    network_name = 'mainnet'
+    checkup_conf = get_checkup_dict(network_name)
 
-    pprint(a)
-
+    pprint(checkup_conf)
