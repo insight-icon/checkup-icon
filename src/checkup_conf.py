@@ -59,8 +59,9 @@ def get_preps(api_endpoint):
     return response
 
 
-def get_checkup_dict(network_name):
-    response = get_preps(network_name)
+def get_checkup_dict(network_name, pull_remote=True):
+    api_enpoint = get_api_endpoint(network_name, pull_remote=pull_remote)
+    response = get_preps(api_enpoint)
     preps = response['result']['preps']
     checkers = []
     for i in range(0, len(preps)):
@@ -91,18 +92,22 @@ def get_checkup_dict(network_name):
     return checkup_conf
 
 
-def write_checkup_conf(checkup_conf):
+def write_checkup_conf(network_name):
+    checkup_conf = get_checkup_dict(network_name)
+
     with open('../checkup1.json', 'w') as f:
         json.dump(checkup_conf, f)
 
 
-def main():
-    api_endpoint = get_api_endpoint(network_name, pull_remote=True)
-    preps = get_preps(api_endpoint)
+def main(network_name):
+    checkup_conf = get_checkup_dict(network_name)
+    pprint(checkup_conf)
+
 
 if __name__ == "__main__":
-    # network_name = sys.argv[1]
-    network_name = 'mainnet'
-    checkup_conf = get_checkup_dict(network_name)
+    if len(sys.argv) > 1:
+        network_name = sys.argv[1]
+    else:
+        network_name = 'mainnet'
 
-    pprint(checkup_conf)
+    main(network_name)
