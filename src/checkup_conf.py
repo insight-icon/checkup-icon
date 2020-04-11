@@ -3,6 +3,7 @@ import json
 import sys
 import logging
 import os
+import fire
 
 from pprint import pprint
 
@@ -99,15 +100,14 @@ def write_checkup_conf(network_name):
         json.dump(checkup_conf, f)
 
 
-def main(network_name):
+def output_dict(network_name):
     checkup_conf = get_checkup_dict(network_name)
     pprint(checkup_conf)
 
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        network_name = sys.argv[1]
-    else:
-        network_name = 'mainnet'
+def main():
+    fire.Fire(name='checkup_conf')
 
-    main(network_name)
+
+if __name__ == "__main__":
+    main()
