@@ -1,10 +1,10 @@
 import pytest
-from src.checkup_conf import get_api_endpoint, get_preps
+from src.checkup_conf import output_dict, get_preps, get_api_endpoint, get_checkup_dict
 
 
 def test_github_sync_local_network_config():
-    a = get_api_endpoint('mainnet')
-    b = get_api_endpoint('mainnet', pull_remote=False)
+    a = output_dict('mainnet')
+    b = output_dict('mainnet', pull_remote=False)
 
     assert a == b
 
@@ -22,3 +22,9 @@ def test_get_preps(api_endpoint):
     preps = get_preps(api_endpoint)
     print(preps)
 
+
+@pytest.mark.parametrize("network", ['mainnet', 'bicon', 'zicon', 'testnet'])
+def test_get_preps(network):
+    print(network)
+    output = get_checkup_dict(network)
+    print(output)

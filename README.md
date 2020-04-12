@@ -1,8 +1,5 @@
-# icon-docker 
+# check-icon 
 
-Dockerfiles for ICON 
+Utility to create ['checkup'](https://github.com/sourcegraph/checkup) config files from the ICON API. 
 
-### Dockerfiles
-
-- cachet 
-    - Runs 
+WIP. 

@@ -4,3 +4,5 @@ Pipfile
 Pipfile.lock
 
 .circleci/.configs
+
+checkup.json.bak

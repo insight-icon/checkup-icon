@@ -1,7 +1,5 @@
 import requests
 import json
-import sys
-import logging
 import os
 import fire
 
@@ -66,8 +64,8 @@ def get_checkup_dict(network_name, pull_remote=True):
     preps = response['result']['preps']
     checkers = []
     for i in range(0, len(preps)):
-        endpoint_url = preps[i]['name']
-        endpoint_name = "{}:9000".format(preps[i]['p2pEndpoint'].split(':')[0])
+        endpoint_name = preps[i]['name']
+        endpoint_url = "{}:9000".format(preps[i]['p2pEndpoint'].split(':')[0])
         checkers.append({
             "type": "tcp",
             "endpoint_name": endpoint_name,
@@ -93,16 +91,16 @@ def get_checkup_dict(network_name, pull_remote=True):
     return checkup_conf
 
 
-def write_checkup_conf(network_name):
-    checkup_conf = get_checkup_dict(network_name)
+def write_checkup_conf(network_name, pull_remote=True):
+    checkup_conf = get_checkup_dict(network_name, pull_remote)
 
-    with open('../checkup1.json', 'w') as f:
+    with open('../checkup.json', 'w') as f:
         json.dump(checkup_conf, f)
 
 
-def output_dict(network_name):
-    checkup_conf = get_checkup_dict(network_name)
-    pprint(checkup_conf)
+def output_dict(network_name, pull_remote=True):
+    checkup_conf = get_checkup_dict(network_name, pull_remote)
+    return checkup_conf
 
 
 def main():

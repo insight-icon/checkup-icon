@@ -1,5 +1,5 @@
 # credit https://github.com/treemo/docker-checkup
-FROM alpine:3.7.7-alpine3.11
+FROM python:3.7.7-alpine3.11
 
 # install requirements
 RUN apk update
